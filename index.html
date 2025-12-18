@@ -1,73 +1,52 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Kosmo Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .box {
-      background: #020617;
-      padding: 24px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,.4);
-    }
-    h1 {
-      margin-bottom: 12px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 12px;
-      border-radius: 8px;
-      border: none;
-    }
-    button {
-      margin-top: 14px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      background: #22c55e;
-      color: #022c22;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      opacity: .9;
-    }
-    .result {
-      margin-top: 16px;
-      font-weight: bold;
-    }
-  </style>
-</head>
 <body>
-  <div class="box">
-    <h1>Kosmo Generator</h1>
-    <p>Masukkan teks:</p>
-    <input id="input" placeholder="contoh: thrifting murah" />
-    <button onclick="generate()">Generate</button>
-    <div class="result" id="result"></div>
+  <div class="card">
+    <h1>KOSMO TOTO</h1>
+    <div class="subtitle">Generator Rumus Angka</div>
+
+    <div class="field">
+      <label>Result Sebelumnya (4D)</label>
+      <input id="prev" maxlength="4" placeholder="contoh: 9431">
+    </div>
+
+    <div class="field">
+      <label>Jumlah Baris Rumus</label>
+      <select id="rows">
+        <option value="5">5 Baris</option>
+        <option value="6">6 Baris</option>
+        <option value="7">7 Baris</option>
+        <option value="8">8 Baris</option>
+        <option value="9">9 Baris</option>
+        <option value="10">10 Baris</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <a href="#" onclick="generate()">GENERATE</a>
+    </div>
+
+    <div class="history" id="output"></div>
   </div>
 
   <script>
     function generate() {
-      const text = document.getElementById('input').value;
-      document.getElementById('result').innerText =
-        text ? "✨ Kosmo: " + text : "Isi dulu teksnya 🙂";
+      const prev = document.getElementById("prev").value;
+      const rows = parseInt(document.getElementById("rows").value);
+      const out = document.getElementById("output");
+
+      if (prev.length !== 4 || isNaN(prev)) {
+        out.innerHTML = "Masukkan angka 4 digit";
+        return;
+      }
+
+      out.innerHTML = "";
+      for (let i = 0; i < rows; i++) {
+        let result = "";
+        for (let j = 0; j < 4; j++) {
+          const digit = (parseInt(prev[j]) + i + j) % 10;
+          result += digit;
+        }
+        out.innerHTML += `<div>${result}</div>`;
+      }
     }
   </script>
 </body>
-</html>
