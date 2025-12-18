@@ -5,142 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KOSMO TOTO - Generator Angka</title>
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #00bfff;
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 40px 20px;
-  }
+body {
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #00bfff;
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:40px 20px;
+}
 
-  .logo {
-    max-width: 140px;
-    margin-bottom: 8px;
-  }
+/* Logo dengan efek glowing */
+.logo {
+  max-width:140px;
+  margin-bottom:8px;
+  filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700);
+  animation: logoGlow 2s infinite alternate;
+}
 
-  h1 {
-    color: #ffd700;
-    margin: 10px 0;
-    text-shadow: 0 0 5px #000;
-  }
+/* Efek glowing untuk teks KOSMO TOTO */
+h1 {
+  color:#ffd700;
+  margin:10px 0;
+  font-size:48px;
+  font-weight:bold;
+  text-align:center;
+  text-transform:uppercase;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #ffd700,
+    0 0 20px #ffb700,
+    0 0 30px #ffb700,
+    0 0 40px #ffb700,
+    0 0 55px #ffb700;
+  animation: glow 2s infinite alternate;
+}
 
-  .subtitle {
-    font-size: 16px;
-    opacity: 0.9;
-    margin-bottom: 20px;
-  }
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #fff,0 0 10px #ffd700,0 0 20px #ffb700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 55px #ffb700; }
+  50% { text-shadow: 0 0 10px #fff,0 0 20px #ffd700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 50px #ffb700,0 0 70px #ffb700; }
+  100% { text-shadow: 0 0 5px #fff,0 0 10px #ffd700,0 0 20px #ffb700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 55px #ffb700; }
+}
 
-  .field {
-    text-align: left;
-    margin-bottom: 12px;
-    width: 100%;
-    max-width: 560px;
-  }
+@keyframes logoGlow {
+  0% { filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700); }
+  50% { filter: drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 30px #ffb700); }
+  100% { filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700); }
+}
 
-  label {
-    font-size: 14px;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  input, select {
-    width: 100%;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border: none;
-    font-size: 15px;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 14px;
-    padding: 13px;
-    border-radius: 14px;
-    border: none;
-    background: linear-gradient(135deg,#ffd700,#ffb700);
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .result {
-    margin-top: 16px;
-    font-size: 15px;
-    text-align: left;
-    background: rgba(0,0,0,0.25);
-    padding: 14px;
-    border-radius: 14px;
-    word-break: break-word;
-    width: 100%;
-    max-width: 560px;
-  }
-
-  .info {
-    margin-top: 8px;
-    font-size: 14px;
-    text-align: center;
-    color: #ffd700;
-    font-weight: bold;
-    text-shadow: 
-      -1px -1px 0 #000,  
-       1px -1px 0 #000,
-      -1px  1px 0 #000,
-       1px  1px 0 #000;
-  }
-
-  .history {
-    margin-top: 14px;
-    background: rgba(0,0,0,0.25);
-    border-radius: 14px;
-    padding: 12px;
-    max-height: 160px;
-    overflow: auto;
-    font-size: 13px;
-    text-align: left;
-    width: 100%;
-    max-width: 560px;
-  }
-
-  .history div {
-    border-bottom: 1px dashed rgba(255,255,255,0.25);
-    padding: 4px 0;
-  }
-
-  .actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-    width: 100%;
-    max-width: 560px;
-  }
-
-  .actions a {
-    flex: 1;
-    text-decoration: none;
-    text-align: center;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    color: #1b1b1b;
-    background: linear-gradient(135deg,#fff,#ffd700);
-  }
-
-  @media(max-width:400px){
-    .field, .result, .history, .actions {
-      max-width: 100%;
-    }
-  }
+/* Field, button, result, history, actions */
+.subtitle { font-size:16px; opacity:0.9; margin-bottom:20px;}
+.field { text-align:left; margin-bottom:12px; width:100%; max-width:560px;}
+label { font-size:14px; display:block; margin-bottom:6px;}
+input, select { width:100%; padding:11px 12px; border-radius:12px; border:none; font-size:15px;}
+button { width:100%; margin-top:14px; padding:13px; border-radius:14px; border:none; background:linear-gradient(135deg,#ffd700,#ffb700); font-weight:bold; font-size:16px; cursor:pointer;}
+.result { margin-top:16px; font-size:15px; text-align:left; background:rgba(0,0,0,0.25); padding:14px; border-radius:14px; word-break:break-word; width:100%; max-width:560px;}
+.info { margin-top:8px; font-size:14px; text-align:center; color:#ffd700; font-weight:bold; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;}
+.history { margin-top:14px; background:rgba(0,0,0,0.25); border-radius:14px; padding:12px; max-height:160px; overflow:auto; font-size:13px; text-align:left; width:100%; max-width:560px;}
+.history div { border-bottom:1px dashed rgba(255,255,255,0.25); padding:4px 0;}
+.actions { display:flex; gap:10px; margin-top:16px; width:100%; max-width:560px;}
+.actions a { flex:1; text-decoration:none; text-align:center; padding:12px; border-radius:12px; font-weight:bold; color:#1b1b1b; background:linear-gradient(135deg,#fff,#ffd700);}
+@media(max-width:400px){.field, .result, .history, .actions { max-width:100%;}}
 </style>
 </head>
 <body>
 
 <img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
-
 <h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
 
@@ -191,75 +124,97 @@ function shuffle(arr){
   return arr;
 }
 
+function getShioFrom2D(num) {
+  const shioTable = {
+    "ULAR":["01","13","25","37","49","61","73","85","97"],
+    "NAGA":["02","14","26","38","50","62","74","86","98"],
+    "KELINCI":["03","15","27","39","51","63","75","87","99"],
+    "HARIMAU":["04","16","28","40","52","64","76","88","00"],
+    "KERBAU":["05","17","29","41","53","65","77","89"],
+    "TIKUS":["06","18","30","42","54","66","78","90"],
+    "BABI":["07","19","31","43","55","67","79","91"],
+    "ANJING":["08","20","32","44","56","68","80","92"],
+    "AYAM":["09","21","33","45","57","69","81","93"],
+    "MONYET":["10","22","34","46","58","70","82","94"],
+    "KAMBING":["11","23","35","47","59","71","83","95"],
+    "KUDA":["12","24","36","48","60","72","84","96"]
+  };
+  num = num.padStart(2,"0");
+  for(const [shio, nums] of Object.entries(shioTable)){
+    if(nums.includes(num)) return shio;
+  }
+  return "-";
+}
+
+function getTop2Shio(hasil2){
+  let freq={};
+  hasil2.forEach(n=>{ freq[n]=(freq[n]||0)+1; });
+  let sorted = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+  let top2 = sorted.slice(0,2);
+  return top2.map(n=>getShioFrom2D(n));
+}
+
 function generate(){
   const prev = document.getElementById('prev').value;
   if(!/^\d{4}$/.test(prev)){
     alert('Result harus 4 digit');
     return;
   }
-
   const rows = parseInt(document.getElementById('rows').value);
   const type = document.getElementById('type').value;
-  const d = prev.split('').map(Number);
 
-  // RUMUS BARIS
-  let rumus = [];
-  for(let i=0; i<rows; i++){
-    rumus.push([
-      (d[0]+i)%10,
-      (d[1]+i)%10,
-      (d[2]+i)%10,
-      (d[3]+i)%10
-    ]);
-  }
-
-  // Semua digit 0-9
-  const allDigits = [0,1,2,3,4,5,6,7,8,9];
+  const allDigits=[0,1,2,3,4,5,6,7,8,9];
   let bbfs = shuffle([...allDigits]).slice(0,7);
+  let poltar = shuffle([...bbfs]).slice(0,5);
+  let cb = `${shuffle([...bbfs])[0]}/${shuffle([...bbfs])[1]}`;
 
-  // CB dari BBFS
-  let shuffledBBFS = shuffle([...bbfs]);
-  let cb = `${shuffledBBFS[0]}/${shuffledBBFS[1]}`;
+  let hasil4=[], hasil3=[], hasil2=[], twin=[];
 
-  let hasil4=[], hasil3=[], hasil2=[];
   function generateHasil(len){
     let arr=[];
     for(let i=0;i<rows;i++){
-      shuffle(bbfs);
-      let line = bbfs.slice(0,len);
-
-      // Tambahkan kemungkinan twin/kembar (~30%)
-      if(Math.random() < 0.3 && len >= 2){
-        const idx = Math.floor(Math.random() * len);
-        line[idx+1 >= len ? idx : idx+1] = line[idx]; // buat twin
-      }
-
-      arr.push(line.join(''));
+      arr.push([
+        (prev[0]*1+i)%10,
+        (prev[1]*1+i)%10,
+        (prev[2]*1+i)%10,
+        (prev[3]*1+i)%10
+      ].slice(0,len).join(''));
     }
     return arr;
   }
 
-  if(type==='4'){ hasil4 = generateHasil(4); }
-  else if(type==='3'){ hasil3 = generateHasil(3); }
-  else if(type==='2'){ hasil2 = generateHasil(2); }
+  if(type==='4') hasil4 = generateHasil(4);
+  else if(type==='3') hasil3 = generateHasil(3);
+  else if(type==='2') hasil2 = generateHasil(2);
   else if(type==='432'){
     hasil4 = generateHasil(4);
     hasil3 = generateHasil(3);
     hasil2 = generateHasil(2);
+
+    // Twin selalu muncul minimal 1 baris
+    for(let i=0;i<rows;i++){
+      let num = bbfs[Math.floor(Math.random()*bbfs.length)];
+      twin.push(`${num}${num}`);
+    }
   }
 
-  let html = `<b>CB:</b> ${cb}<br>
-              <b>BBFS:</b> ${bbfs.join(' ')}<br>`;
+  let topShio=[];
+  if(type==='432') topShio = getTop2Shio(hasil2);
 
-  if(hasil4.length) html += `<b>HASIL 4D:</b><br>${hasil4.join(' - ')}<br>`;
-  if(hasil3.length) html += `<b>HASIL 3D:</b><br>${hasil3.join(' - ')}<br>`;
-  if(hasil2.length) html += `<b>HASIL 2D:</b><br>${hasil2.join(' - ')}`;
+  let html = `<b>BBFS:</b> ${bbfs.join(' ')}<br>
+              <b>POLTAR:</b> ${poltar.join(' ')}<br>
+              <b>CB:</b> ${cb}<br>`;
+  if(hasil4.length) html += `<b>4D:</b><br>${hasil4.join(' - ')}<br>`;
+  if(hasil3.length) html += `<b>3D:</b><br>${hasil3.join(' - ')}<br>`;
+  if(hasil2.length) html += `<b>2D:</b><br>${hasil2.join(' - ')}<br>`;
+  if(twin.length) html += `<b>TWIN:</b> ${[...new Set(twin)].join(' - ')}<br>`;
+  if(topShio.length) html += `<b>SHIO:</b> ${topShio.join(' - ')}`;
 
   document.getElementById('result').innerHTML = html;
 
   const h = document.getElementById('history');
   const div = document.createElement('div');
-  div.innerText = `[${new Date().toLocaleTimeString()}] ${type}D → ${hasil4.concat(hasil3, hasil2).join(' - ')}`;
+  div.innerText = `[${new Date().toLocaleTimeString()}] ${type}D → ${hasil4.concat(hasil3,hasil2).join(' - ')}`;
   h.appendChild(div);
 }
 </script>
