@@ -35,17 +35,6 @@
     margin-bottom: 20px;
   }
 
-  .example {
-    font-size: 18px;
-    background: rgba(0,0,0,0.25);
-    padding: 10px 14px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 560px;
-    text-align: center;
-  }
-
   .field {
     text-align: left;
     margin-bottom: 12px;
@@ -59,7 +48,7 @@
     margin-bottom: 6px;
   }
 
-  select {
+  input, select {
     width: 100%;
     padding: 11px 12px;
     border-radius: 12px;
@@ -143,7 +132,7 @@
   }
 
   @media(max-width:400px){
-    .field, .result, .history, .actions, .example {
+    .field, .result, .history, .actions {
       max-width: 100%;
     }
   }
@@ -156,8 +145,11 @@
 <h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
 
-<!-- Contoh angka tanpa input -->
-<div class="example"><strong>Contoh Result Sebelumnya (4D):</strong> 9431</div>
+<!-- Input angka 4D -->
+<div class="field">
+  <label>Masukkan Result Sebelumnya (4D)</label>
+  <input id="prev" maxlength="4" placeholder="Contoh: 9431">
+</div>
 
 <div class="field">
   <label>Jumlah Baris Rumus</label>
@@ -202,7 +194,7 @@ function shuffle(arr){
 }
 
 function generate(){
-  const prev = prompt("Masukkan Result Sebelumnya (4D):", "9431");
+  const prev=document.getElementById('prev').value;
   if(!/^\d{4}$/.test(prev)){
     alert('Result harus 4 digit');
     return;
