@@ -86,7 +86,6 @@
     text-align: center;
     color: #ffd700;
     font-weight: bold;
-    /* Garis pinggir hitam */
     text-shadow: 
       -1px -1px 0 #000,  
        1px -1px 0 #000,
@@ -194,18 +193,19 @@ function shuffle(arr){
 }
 
 function generate(){
-  const prev=document.getElementById('prev').value;
+  const prev = document.getElementById('prev').value;
   if(!/^\d{4}$/.test(prev)){
     alert('Result harus 4 digit');
     return;
   }
 
-  const rows=parseInt(document.getElementById('rows').value);
-  const type=document.getElementById('type').value;
-  const d=prev.split('').map(Number);
+  const rows = parseInt(document.getElementById('rows').value);
+  const type = document.getElementById('type').value;
+  const d = prev.split('').map(Number);
 
-  let rumus=[];
-  for(let i=0;i<rows;i++){
+  // RUMUS BARIS
+  let rumus = [];
+  for(let i=0; i<rows; i++){
     rumus.push([
       (d[0]+i)%10,
       (d[1]+i)%10,
@@ -214,9 +214,9 @@ function generate(){
     ]);
   }
 
-  let bbfs=[...new Set(rumus.flat())];
-  shuffle(bbfs);
-  if(bbfs.length>7) bbfs=bbfs.slice(0,7);
+  // Semua digit 0-9
+  const allDigits = [0,1,2,3,4,5,6,7,8,9];
+  let bbfs = shuffle([...allDigits]).slice(0,7);
 
   let cb = `${Math.floor(Math.random()*9)+1}/${Math.floor(Math.random()*9)+1}`;
 
@@ -225,7 +225,15 @@ function generate(){
     let arr=[];
     for(let i=0;i<rows;i++){
       shuffle(bbfs);
-      arr.push(bbfs.slice(0,len).join(''));
+      let line = bbfs.slice(0,len);
+
+      // Tambahkan kemungkinan twin/kembar (~30%)
+      if(Math.random() < 0.3 && len >= 2){
+        const idx = Math.floor(Math.random() * len);
+        line[idx+1 >= len ? idx : idx+1] = line[idx]; // buat twin
+      }
+
+      arr.push(line.join(''));
     }
     return arr;
   }
@@ -248,9 +256,9 @@ function generate(){
 
   document.getElementById('result').innerHTML = html;
 
-  const h=document.getElementById('history');
-  const div=document.createElement('div');
-  div.innerText=`[${new Date().toLocaleTimeString()}] ${type}D → ${hasil4.concat(hasil3, hasil2).join(' - ')}`;
+  const h = document.getElementById('history');
+  const div = document.createElement('div');
+  div.innerText = `[${new Date().toLocaleTimeString()}] ${type}D → ${hasil4.concat(hasil3, hasil2).join(' - ')}`;
   h.appendChild(div);
 }
 </script>
