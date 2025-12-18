@@ -8,12 +8,8 @@
   body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    /* Full background biru terang + galaxy */
-    background: linear-gradient(135deg, #00bfff, #1e90ff);
-    background-image: url('https://i.ibb.co/2dJc6zv/galaxy.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    /* Full background biru terang tanpa gambar */
+    background: #00bfff;
     color: #fff;
     min-height: 100vh;
     display: flex;
@@ -21,6 +17,11 @@
     align-items: center;
     justify-content: flex-start;
     padding: 40px 20px;
+  }
+
+  .logo {
+    max-width: 140px;
+    margin-bottom: 8px;
   }
 
   h1 {
@@ -133,6 +134,9 @@
 </style>
 </head>
 <body>
+
+<!-- Logo tetap ada -->
+<img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
 
 <h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
