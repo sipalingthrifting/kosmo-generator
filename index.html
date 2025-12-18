@@ -102,16 +102,15 @@ function generate(){
   }
 
   const d=prev.split('').map(Number);
-  const AS=d[3], KOP=d[2], KEPALA=d[1], EKOR=d[0];
 
   // BUAT RUMUS BARIS
   let rumus=[];
   for(let i=0;i<rows;i++){
     rumus.push([
-      (EKOR+i)%10,
-      (KEPALA+i)%10,
-      (KOP+i)%10,
-      (AS+i)%10
+      (d[0]+i)%10,
+      (d[1]+i)%10,
+      (d[2]+i)%10,
+      (d[3]+i)%10
     ]);
   }
 
@@ -121,24 +120,32 @@ function generate(){
   if(bbfs.length>7) bbfs=bbfs.slice(0,7);
 
   // CB format contoh 3/1
-  let cb = `${(AS+KOP)%10}/${(KEPALA+EKOR)%10}`;
+  let cb = `${Math.floor(Math.random()*9)+1}/${Math.floor(Math.random()*9)+1}`;
 
-  // HASIL
+  // HASIL random dari BBFS
   let hasil=[];
   if(type===4){
-    for(let i=0;i+3<bbfs.length;i+=4) hasil.push(bbfs.slice(i,i+4).join(''));
+    for(let i=0;i<rows;i++){
+      shuffle(bbfs);
+      hasil.push(bbfs.slice(0,4).join(''));
+    }
   }
   if(type===3){
-    for(let i=0;i+2<bbfs.length;i+=3) hasil.push(bbfs.slice(i,i+3).join(''));
+    for(let i=0;i<rows;i++){
+      shuffle(bbfs);
+      hasil.push(bbfs.slice(0,3).join(''));
+    }
   }
   if(type===2){
-    for(let i=0;i+1<bbfs.length;i+=2) hasil.push(bbfs.slice(i,i+2).join(''));
+    for(let i=0;i<rows;i++){
+      shuffle(bbfs);
+      hasil.push(bbfs.slice(0,2).join(''));
+    }
   }
 
   document.getElementById('result').innerHTML=`
     <b>CB:</b> ${cb}<br>
     <b>BBFS:</b> ${bbfs.join(' ')}<br>
-    <b>AS:</b> ${AS} | <b>KOP:</b> ${KOP} | <b>KEPALA:</b> ${KEPALA} | <b>EKOR:</b> ${EKOR}<br><br>
     <b>HASIL ${type}D:</b><br>${hasil.join(' - ')}
   `;
 
