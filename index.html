@@ -144,7 +144,6 @@
 <h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
 
-<!-- Input angka 4D -->
 <div class="field">
   <label>Masukkan Result Sebelumnya (4D)</label>
   <input id="prev" maxlength="4" placeholder="Contoh: 9431">
@@ -218,7 +217,9 @@ function generate(){
   const allDigits = [0,1,2,3,4,5,6,7,8,9];
   let bbfs = shuffle([...allDigits]).slice(0,7);
 
-  let cb = `${Math.floor(Math.random()*9)+1}/${Math.floor(Math.random()*9)+1}`;
+  // CB dari BBFS
+  let shuffledBBFS = shuffle([...bbfs]);
+  let cb = `${shuffledBBFS[0]}/${shuffledBBFS[1]}`;
 
   let hasil4=[], hasil3=[], hasil2=[];
   function generateHasil(len){
