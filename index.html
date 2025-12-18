@@ -30,38 +30,40 @@ function generate(){
   let hasil4D=[];
   for(let i=0;i<rumus.length;i++){
     for(let j=i+1;j<rumus.length;j++){
-      let val=`${rumus[i][0]}${rumus[j][1]}${rumus[i][2]}${rumus[j][3]}`;
-      if(hasil4D.length<50) hasil4D.push(val);
+      let v=`${rumus[i][0]}${rumus[j][1]}${rumus[i][2]}${rumus[j][3]}`;
+      if(hasil4D.length<50) hasil4D.push(v);
     }
   }
 
-  /* ===== BBFS MAX 6 DIGIT ===== */
-  let bbfs=[...new Set(hasil4D.join('').split(''))];
-  shuffle(bbfs);
-  bbfs=bbfs.slice(0,6);
+  /* ===== BBFS RANKING ===== */
+  let freq={};
+  hasil4D.join('').split('').forEach(d=>{
+    freq[d]=(freq[d]||0)+1;
+  });
+
+  let bbfs=Object.entries(freq)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,6)
+    .map(v=>v[0]);
 
   /* ===== CB (1 DIGIT → FORMAT 3/7) ===== */
-  const cbDigits=[bbfs[0],bbfs[1]].sort();
-  const cb=`(${cbDigits.join('/')})`;
+  const cb=`(${bbfs[0]}/${bbfs[1]})`;
 
   /* ===== HASIL 3D & 2D ===== */
   let hasil=[];
   if(type===4) hasil=hasil4D;
+
   if(type===3){
-    for(let i=0;i<bbfs.length;i++){
-      for(let j=i+1;j<bbfs.length;j++){
-        for(let k=j+1;k<bbfs.length;k++){
+    for(let i=0;i<bbfs.length;i++)
+      for(let j=i+1;j<bbfs.length;j++)
+        for(let k=j+1;k<bbfs.length;k++)
           hasil.push(bbfs[i]+bbfs[j]+bbfs[k]);
-        }
-      }
-    }
   }
+
   if(type===2){
-    for(let i=0;i<bbfs.length;i++){
-      for(let j=i+1;j<bbfs.length;j++){
+    for(let i=0;i<bbfs.length;i++)
+      for(let j=i+1;j<bbfs.length;j++)
         hasil.push(bbfs[i]+bbfs[j]);
-      }
-    }
   }
 
   shuffle(hasil);
@@ -72,7 +74,7 @@ function generate(){
     ${rumus.map(r=>r.join('')).join('<br>')}<br><br>
 
     <b>CB:</b> ${cb}<br>
-    <b>BBFS:</b> ${bbfs.join(' ')}<br><br>
+    <b>BBFS (RANKING):</b> ${bbfs.join(' ')}<br><br>
 
     <b>HASIL ${type}D:</b><br>
     ${hasil.slice(0,50).join(' - ')}
