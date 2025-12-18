@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kosmo Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: #020617;
+      padding: 24px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    }
+    h1 {
+      margin-bottom: 12px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      margin-top: 14px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: #022c22;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: .9;
+    }
+    .result {
+      margin-top: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Kosmo Generator</h1>
+    <p>Masukkan teks:</p>
+    <input id="input" placeholder="contoh: thrifting murah" />
+    <button onclick="generate()">Generate</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function generate() {
+      const text = document.getElementById('input').value;
+      document.getElementById('result').innerText =
+        text ? "✨ Kosmo: " + text : "Isi dulu teksnya 🙂";
+    }
+  </script>
+</body>
+</html>
