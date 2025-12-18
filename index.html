@@ -1,4 +1,82 @@
 <body>
+  <script>
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function generate(){
+  const prev = document.getElementById('prev').value;
+  const rows = parseInt(document.getElementById('rows').value);
+  const type = parseInt(document.getElementById('type').value);
+
+  if(!/^\d{4}$/.test(prev)){
+    alert('Result harus 4 digit');
+    return;
+  }
+
+  const d = prev.split('').map(Number);
+
+  // AWALAN KOSMO
+  const AS = d[3];
+  const KOP = d[2];
+  const KEPALA = d[1];
+  const EKOR = d[0];
+
+  // BUAT CB
+  let rumus = [];
+  for(let i=0;i<rows;i++){
+    rumus.push([
+      (EKOR+i)%10,
+      (KEPALA+i)%10,
+      (KOP+i)%10,
+      (AS+i)%10
+    ]);
+  }
+
+  // BBFS
+  let bbfs = [...new Set(rumus.flat())];
+  shuffle(bbfs);
+
+  // HASIL
+  let hasil = [];
+  if(type===4){
+    for(let i=0;i+3<bbfs.length;i+=4){
+      hasil.push(bbfs.slice(i,i+4).join(''));
+    }
+  }
+  if(type===3){
+    for(let i=0;i+2<bbfs.length;i+=3){
+      hasil.push(bbfs.slice(i,i+3).join(''));
+    }
+  }
+  if(type===2){
+    for(let i=0;i+1<bbfs.length;i+=2){
+      hasil.push(bbfs.slice(i,i+2).join(''));
+    }
+  }
+
+  document.getElementById('result').innerHTML = `
+    <b>CB:</b> ${rumus.map(r=>r.join('')).join(' | ')}<br>
+    <b>BBFS:</b> ${bbfs.join(' ')}<br>
+    <b>AS:</b> ${AS} | 
+    <b>KOP:</b> ${KOP} | 
+    <b>KEPALA:</b> ${KEPALA} | 
+    <b>EKOR:</b> ${EKOR}<br><br>
+    <b>HASIL ${type}D:</b><br>
+    ${hasil.join(' - ')}
+  `;
+
+  const h = document.getElementById('history');
+  const div = document.createElement('div');
+  div.innerText = `[${new Date().toLocaleTimeString()}] ${type}D → ${hasil.join(' - ')}`;
+  h.appendChild(div);
+}
+</script>
+
   <div class="card">
     <h1>KOSMO TOTO</h1>
     <div class="subtitle">Generator Rumus Angka</div>
