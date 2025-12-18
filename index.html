@@ -18,42 +18,38 @@ body {
   padding:40px 20px;
 }
 
-/* Logo dengan efek glowing */
-.logo {
-  max-width:140px;
-  margin-bottom:8px;
-  filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700);
-  animation: logoGlow 2s infinite alternate;
-}
-
-/* Efek glowing untuk teks KOSMO TOTO */
+/* Efek cahaya lewat untuk teks KOSMO TOTO */
 h1 {
-  color:#ffd700;
-  margin:10px 0;
   font-size:48px;
   font-weight:bold;
   text-align:center;
   text-transform:uppercase;
-  text-shadow:
-    0 0 5px #fff,
-    0 0 10px #ffd700,
-    0 0 20px #ffb700,
-    0 0 30px #ffb700,
-    0 0 40px #ffb700,
-    0 0 55px #ffb700;
-  animation: glow 2s infinite alternate;
+  background: linear-gradient(120deg, #ffd700, #fff, #ffb700);
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 2s linear infinite;
 }
 
-@keyframes glow {
-  0% { text-shadow: 0 0 5px #fff,0 0 10px #ffd700,0 0 20px #ffb700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 55px #ffb700; }
-  50% { text-shadow: 0 0 10px #fff,0 0 20px #ffd700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 50px #ffb700,0 0 70px #ffb700; }
-  100% { text-shadow: 0 0 5px #fff,0 0 10px #ffd700,0 0 20px #ffb700,0 0 30px #ffb700,0 0 40px #ffb700,0 0 55px #ffb700; }
+@keyframes shine {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-@keyframes logoGlow {
-  0% { filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700); }
-  50% { filter: drop-shadow(0 0 10px #fff) drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 30px #ffb700); }
-  100% { filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 10px #ffb700); }
+/* Efek cahaya lewat untuk logo */
+.logo {
+  max-width:140px;
+  margin-bottom:8px;
+  filter: brightness(1.2);
+  animation: logoShine 3s linear infinite;
+}
+
+@keyframes logoShine {
+  0% { filter: brightness(1.0); }
+  50% { filter: brightness(1.8); }
+  100% { filter: brightness(1.0); }
 }
 
 /* Field, button, result, history, actions */
@@ -170,6 +166,7 @@ function generate(){
 
   let hasil4=[], hasil3=[], hasil2=[], twin=[];
 
+  // Rumus lama tetap
   function generateHasil(len){
     let arr=[];
     for(let i=0;i<rows;i++){
@@ -191,7 +188,7 @@ function generate(){
     hasil3 = generateHasil(3);
     hasil2 = generateHasil(2);
 
-    // Twin selalu muncul minimal 1 baris
+    // Twin selalu muncul dari BBFS, jumlah sama dengan rows
     for(let i=0;i<rows;i++){
       let num = bbfs[Math.floor(Math.random()*bbfs.length)];
       twin.push(`${num}${num}`);
