@@ -65,6 +65,22 @@ button { width:100%; margin-top:14px; padding:13px; border-radius:14px; border:n
 .actions { display:flex; gap:10px; margin-top:16px; width:100%; max-width:560px;}
 .actions a { flex:1; text-decoration:none; text-align:center; padding:12px; border-radius:12px; font-weight:bold; color:#1b1b1b; background:linear-gradient(135deg,#fff,#ffd700);}
 @media(max-width:400px){.field, .result, .history, .actions { max-width:100%;}}
+
+/* Pop-up notification */
+#popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,215,0,0.95);
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #000;
+  display: none;
+  z-index: 1000;
+  font-family: Arial, sans-serif;
+}
 </style>
 </head>
 <body>
@@ -111,6 +127,9 @@ button { width:100%; margin-top:14px; padding:13px; border-radius:14px; border:n
   <a href="https://heylink.me/KosmototoResmi/" target="_blank">LOGIN</a>
 </div>
 
+<!-- Pop-up -->
+<div id="popup"></div>
+
 <script>
 function shuffle(arr){
   for(let i=arr.length-1;i>0;i--){
@@ -150,6 +169,19 @@ function getTop2Shio(hasil2){
   return top2.map(n=>getShioFrom2D(n));
 }
 
+function showPopup(message, duration = 3000) {
+  const popup = document.getElementById('popup');
+  popup.innerText = message;
+  popup.style.display = 'block';
+  popup.style.opacity = '1';
+  
+  setTimeout(() => {
+    popup.style.transition = 'opacity 0.5s';
+    popup.style.opacity = '0';
+    setTimeout(() => { popup.style.display = 'none'; popup.style.transition=''; }, 500);
+  }, duration);
+}
+
 function generate(){
   const prev = document.getElementById('prev').value;
   if(!/^\d{4}$/.test(prev)){
@@ -166,16 +198,15 @@ function generate(){
 
   let hasil4=[], hasil3=[], hasil2=[], twin=[];
 
-  // Rumus lama tetap
   function generateHasil(len){
     let arr=[];
     for(let i=0;i<rows;i++){
-      arr.push([
-        (prev[0]*1+i)%10,
-        (prev[1]*1+i)%10,
-        (prev[2]*1+i)%10,
-        (prev[3]*1+i)%10
-      ].slice(0,len).join(''));
+      let line = [];
+      for(let j=0;j<len;j++){
+        // rumus utama + acakan 0-2
+        line.push((prev[j]*1 + i + Math.floor(Math.random()*3)) % 10);
+      }
+      arr.push(line.join(''));
     }
     return arr;
   }
@@ -188,7 +219,7 @@ function generate(){
     hasil3 = generateHasil(3);
     hasil2 = generateHasil(2);
 
-    // Twin selalu muncul dari BBFS, jumlah sama dengan rows
+    // Twin selalu muncul dari BBFS
     for(let i=0;i<rows;i++){
       let num = bbfs[Math.floor(Math.random()*bbfs.length)];
       twin.push(`${num}${num}`);
@@ -213,6 +244,11 @@ function generate(){
   const div = document.createElement('div');
   div.innerText = `[${new Date().toLocaleTimeString()}] ${type}D → ${hasil4.concat(hasil3,hasil2).join(' - ')}`;
   h.appendChild(div);
+
+  // Pop-up ID dan nominal random
+  const randomID = `R${Math.floor(Math.random()*900000 + 100000)}`;
+  const amount = Math.floor(Math.random()*500000 + 100000);
+  showPopup(`ID ${randomID} TELAH BERHASIL WITHDRAW RP ${amount.toLocaleString()}`);
 }
 </script>
 </body>
