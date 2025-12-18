@@ -8,7 +8,6 @@
   body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    /* Full background biru terang tanpa gambar */
     background: #00bfff;
     color: #fff;
     min-height: 100vh;
@@ -36,6 +35,17 @@
     margin-bottom: 20px;
   }
 
+  .example {
+    font-size: 18px;
+    background: rgba(0,0,0,0.25);
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+  }
+
   .field {
     text-align: left;
     margin-bottom: 12px;
@@ -49,7 +59,7 @@
     margin-bottom: 6px;
   }
 
-  input, select {
+  select {
     width: 100%;
     padding: 11px 12px;
     border-radius: 12px;
@@ -83,10 +93,16 @@
 
   .info {
     margin-top: 8px;
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     color: #ffd700;
     font-weight: bold;
+    /* Garis pinggir hitam */
+    text-shadow: 
+      -1px -1px 0 #000,  
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       1px  1px 0 #000;
   }
 
   .history {
@@ -127,7 +143,7 @@
   }
 
   @media(max-width:400px){
-    .field, .result, .history, .actions {
+    .field, .result, .history, .actions, .example {
       max-width: 100%;
     }
   }
@@ -135,16 +151,13 @@
 </head>
 <body>
 
-<!-- Logo tetap ada -->
 <img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
 
 <h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
 
-<div class="field">
-  <label>Result Sebelumnya (4D)</label>
-  <input id="prev" maxlength="4" value="9431">
-</div>
+<!-- Contoh angka tanpa input -->
+<div class="example"><strong>Contoh Result Sebelumnya (4D):</strong> 9431</div>
 
 <div class="field">
   <label>Jumlah Baris Rumus</label>
@@ -189,15 +202,14 @@ function shuffle(arr){
 }
 
 function generate(){
-  const prev=document.getElementById('prev').value;
-  const rows=parseInt(document.getElementById('rows').value);
-  const type=document.getElementById('type').value;
-
+  const prev = prompt("Masukkan Result Sebelumnya (4D):", "9431");
   if(!/^\d{4}$/.test(prev)){
     alert('Result harus 4 digit');
     return;
   }
 
+  const rows=parseInt(document.getElementById('rows').value);
+  const type=document.getElementById('type').value;
   const d=prev.split('').map(Number);
 
   let rumus=[];
