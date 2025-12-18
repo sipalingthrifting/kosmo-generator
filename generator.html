@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOSMO TOTO - Generator Angka</title>
+  <style>
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,#2aa7ff,#0a1f44);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border-radius:20px;padding:26px;width:100%;max-width:560px;box-shadow:0 25px 50px rgba(0,0,0,.45);text-align:center}
+    .logo{max-width:140px;margin-bottom:8px}
+    h1{color:#ffd700;margin:6px 0}
+    .subtitle{font-size:13px;opacity:.85;margin-bottom:18px}
+    .field{text-align:left;margin-bottom:12px}
+    label{font-size:14px;display:block;margin-bottom:6px}
+    input,select{width:100%;padding:11px 12px;border-radius:12px;border:none;font-size:15px}
+    button{width:100%;margin-top:14px;padding:13px;border-radius:14px;border:none;background:linear-gradient(135deg,#ffd700,#ffb700);font-weight:bold;font-size:16px;cursor:pointer}
+    .result{margin-top:16px;font-size:15px;text-align:left;background:rgba(0,0,0,.25);padding:14px;border-radius:14px}
+    .history{margin-top:14px;background:rgba(0,0,0,.25);border-radius:14px;padding:12px;max-height:160px;overflow:auto;font-size:13px;text-align:left}
+    .history div{border-bottom:1px dashed rgba(255,255,255,.25);padding:4px 0}
+    .actions{display:flex;gap:10px;margin-top:16px}
+    .actions a{flex:1;text-decoration:none;text-align:center;padding:12px;border-radius:12px;font-weight:bold;color:#1b1b1b;background:linear-gradient(135deg,#fff,#ffd700)}
+  </style>
+</head>
+<body>
+<div class="card">
+  <img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
+  <h1>KOSMO TOTO</h1>
+  <div class="subtitle">Generator Rumus Angka</div>
+
+  <div class="field">
+    <label>Result Sebelumnya (4D)</label>
+    <input id="prev" maxlength="4" value="9431">
+  </div>
+
+  <div class="field">
+    <label>Jumlah Baris Rumus</label>
+    <select id="rows">
+      <option value="5">5 Baris</option>
+      <option value="6">6 Baris</option>
+      <option value="7">7 Baris</option>
+      <option value="8">8 Baris</option>
+      <option value="9">9 Baris</option>
+      <option value="10">10 Baris</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Pilih Jenis</label>
+    <select id="type">
+      <option value="4">4D</option>
+      <option value="3">3D</option>
+      <option value="2">2D</option>
+    </select>
+  </div>
+
+  <button onclick="generate()">GENERATE</button>
+
+  <div class="result" id="result">-</div>
+  <div class="history" id="history"><strong>Riwayat</strong></div>
+
+  <div class="actions">
+    <a href="https://mez.ink/kosmototoresmi" target="_blank">DAFTAR</a>
+    <a href="https://heylink.me/KosmototoResmi/" target="_blank">LOGIN</a>
+  </div>
+</div>
+
+<script>
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+function generate(){
+  const prev=document.getElementById('prev').value;
+  const rows=parseInt(document.getElementById('rows').value);
+  const type=parseInt(document.getElementById('type').value);
+  if(!/^\d{4}$/.test(prev)){alert('Result harus 4 digit');return}
+
+  const d=prev.split('').map(Number);
+
+  // AS KOP KEPALA EKOR
+  const AS=d[3],KOP=d[2],KEPALA=d[1],EKOR=d[0];
+
+  // BUAT RUMUS BARIS
+  let rumus=[];
+  for(let i=0;i<rows;i++){
+    rumus.push([
+      (EKOR+i)%10,
+      (KEPALA+i)%10,
+      (KOP+i)%10,
+      (AS+i)%10
+    ])
+  }
+
+  // BBFS
+  let bbfs=[...new Set(rumus.flat())];
+  shuffle(bbfs);
+
+  // HASIL
+  let hasil=[];
+  if(type===4){for(let i=0;i+3<bbfs.length;i+=4)hasil.push(bbfs.slice(i,i+4).join(''))}
+  if(type===3){for(let i=0;i+2<bbfs.length;i+=3)hasil.push(bbfs.slice(i,i+3).join(''))}
+  if(type===2){for(let i=0;i+1<bbfs.length;i+=2)hasil.push(bbfs.slice(i,i+2).join(''))}
+
+  document.getElementById('result').innerHTML=`
+    <b>CB:</b> ${rumus.map(r=>r.join('')).join(' | ')}<br>
+    <b>BBFS:</b> ${bbfs.join(' ')}<br>
+    <b>AS:</b> ${AS} | <b>KOP:</b> ${KOP} | <b>KEPALA:</b> ${KEPALA} | <b>EKOR:</b> ${EKOR}<br><br>
+    <b>HASIL ${type}D:</b><br>${hasil.join(' - ')}
+  `;
+
+  const h=document.getElementById('history');
+  const div=document.createElement('div');
+  div.innerText=`[${new Date().toLocaleTimeString()}] ${type}D → ${hasil.join(' - ')}`;
+  h.appendChild(div);
+}
+</script>
+</body>
+</html>
