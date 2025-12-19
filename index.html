@@ -132,6 +132,7 @@ button { width:100%; margin-top:14px; padding:13px; border-radius:14px; border:n
 <div id="popup"></div>
 
 <script>
+/* ===== Fungsi Utama ===== */
 function shuffle(arr){
   for(let i=arr.length-1;i>0;i--){
     let j=Math.floor(Math.random()*(i+1));
@@ -170,7 +171,7 @@ function getTop2Shio(hasil2){
   return top2.map(n=>getShioFrom2D(n));
 }
 
-// Pop-up otomatis dari atas
+/* ===== Popup ===== */
 function showPopup(message, duration = 3000) {
   const popup = document.getElementById('popup');
   popup.innerText = message;
@@ -183,7 +184,7 @@ function showPopup(message, duration = 3000) {
   }, duration);
 }
 
-// Fungsi generate tetap sama
+/* ===== Generator ===== */
 function generate(){
   const prev = document.getElementById('prev').value;
   if(!/^\d{4}$/.test(prev)){
@@ -246,23 +247,51 @@ function generate(){
   h.appendChild(div);
 }
 
-// Loop pop-up selang-seling Withdraw & Bonus
+/* ===== Popup Selang-Seling ===== */
+const bonusIDs = [
+  "Ekobakso","Roses22","Dede007","Erpandi","Jangkrik","Setan83","Wahyu23","Cbadru","Matuan",
+  "BANGPIKO","Ghitsa","Coronk13","Sindung","dian2001","tyo212","Parchan88","Loiss71","santan6",
+  "Kingiqbale","Butet001","Udinpoak","Iswara01","Beben80","benjohoki","Misran85","Ghea06",
+  "Lingling11","Penceng","Endrikcah","tingkirjaya22","Aasep02","Jaya86","byron28","sipurowi",
+  "Bandot57","Pursep99","Usup12345","Ardiyantogel18","Bumiku85","Rajjawd","Golgota12","Zhein16",
+  "max88win","nano888","Acenk27","koko6331","Purbalingga111","Saniya","Zulgacor","Jumatpahing",
+  "Weduskawin","Pukon2","Ellenzuan76","kopi111","Shiggy","painganjep3","Dimas80","INDRIYANTI",
+  "sanmumin84","Waras33","Aleksa","Cahyo79","adimoko01","Kera99","wahyu7890","Jagoan08",
+  "neles92","Pasell","Xardina","Andikpube"
+];
+
+const withdrawIDs = [
+  "debos","dend","dian81","dista45","dragonball","fadlito2885","fandy","fjr07","grafika38",
+  "roky06","joen66","jp776","lowkey","mdonk123","nagita96","kos33",
+  "pemula","quenzy","sugih79","susanto","teraso","Purbalingga111","Saniya","Zulgacor","Jumatpahing",
+  "Weduskawin","Pukon2","Ellenzuan76","kopi111","Shiggy","painganjep3","Dimas80","INDRIYANTI",
+  "sanmumin84","Waras33","Aleksa","Cahyo79","adimoko01","Kera99","wahyu7890","Jagoan08",
+  "neles92","Pasell","Xardina","Andikkos"
+];
+
+function randomFrom(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function formatRupiah(num){
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 let isWithdrawTurn = true;
 
-setInterval(()=>{
-  const id = randomID();
-
+setInterval(() => {
+  let id, amount;
   if(isWithdrawTurn){
-    const wd = randomWithdraw();
-    showPopup(`ID (${id}) TELAH BERHASIL WITHDRAW RP ${formatRupiah(wd)}`);
+    id = randomFrom(withdrawIDs);
+    amount = Math.floor(Math.random()*5000000) + 100000; // Rp 100.000 - 5.000.000
+    showPopup(`ID (${id}) TELAH BERHASIL WITHDRAW RP ${formatRupiah(amount)}`);
   } else {
-    const bonus = randomBonus();
-    showPopup(`ID (${id}) Berhasil claim bonus RP ${formatRupiah(bonus)}`);
+    id = randomFrom(bonusIDs);
+    amount = Math.floor(Math.random()*2000000) + 50000; // Rp 50.000 - 2.000.000
+    showPopup(`ID (${id}) Berhasil claim bonus RP ${formatRupiah(amount)}`);
   }
-
   isWithdrawTurn = !isWithdrawTurn;
-}, 1000);
-
+}, 2000);
 </script>
 </body>
 </html>
