@@ -246,12 +246,23 @@ function generate(){
   h.appendChild(div);
 }
 
-// Loop pop-up otomatis setiap detik
+// Loop pop-up selang-seling Withdraw & Bonus
+let isWithdrawTurn = true;
+
 setInterval(()=>{
-  const randomID = `R${Math.floor(Math.random()*900000 + 100000)}`;
-  const amount = Math.floor(Math.random()*500000 + 100000);
-  showPopup(`ID ${randomID} TELAH BERHASIL WITHDRAW RP ${amount.toLocaleString()}`);
+  const id = randomID();
+
+  if(isWithdrawTurn){
+    const wd = randomWithdraw();
+    showPopup(`ID (${id}) TELAH BERHASIL WITHDRAW RP ${formatRupiah(wd)}`);
+  } else {
+    const bonus = randomBonus();
+    showPopup(`ID (${id}) Berhasil claim bonus RP ${formatRupiah(bonus)}`);
+  }
+
+  isWithdrawTurn = !isWithdrawTurn;
 }, 1000);
+
 </script>
 </body>
 </html>
