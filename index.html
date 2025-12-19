@@ -4,247 +4,286 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KOSMO TOTO - Generator Angka</title>
-
 <style>
-body{
+body {
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#00bfff;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #00bfff;
   color:#fff;
   min-height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
+  justify-content:flex-start;
   padding:40px 20px;
 }
 
-/* === EFEK CAHAYA LEWAT === */
-.shine{
-  background:linear-gradient(120deg,#ffd700,#ffffff,#ffb700);
-  background-size:200% auto;
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  animation:shine 2s linear infinite;
-}
-
-@keyframes shine{
-  0%{background-position:200% center}
-  100%{background-position:-200% center}
-}
-
-/* LOGO */
-.logo{
-  max-width:140px;
-  margin-bottom:10px;
-  animation:logoGlow 3s infinite;
-}
-@keyframes logoGlow{
-  0%,100%{filter:brightness(1)}
-  50%{filter:brightness(1.8)}
-}
-
-h1{
-  font-size:46px;
-  margin:5px 0;
+/* Efek cahaya lewat untuk teks KOSMO TOTO */
+h1 {
+  font-size:48px;
+  font-weight:bold;
+  text-align:center;
   text-transform:uppercase;
+  background: linear-gradient(120deg, #ffd700, #fff, #ffb700);
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 2s linear infinite;
 }
 
-.subtitle{
-  font-size:16px;
-  margin-bottom:20px;
-  opacity:.9;
+@keyframes shine {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-/* FORM */
-.field{
-  width:100%;
-  max-width:560px;
-  margin-bottom:12px;
-}
-label{font-size:14px;margin-bottom:6px;display:block}
-input,select{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  font-size:15px;
+/* Efek cahaya lewat untuk logo */
+.logo {
+  max-width:140px;
+  margin-bottom:8px;
+  filter: brightness(1.2);
+  animation: logoShine 3s linear infinite;
 }
 
-/* BUTTON */
-button,.btn{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  background:#111;
+@keyframes logoShine {
+  0% { filter: brightness(1.0); }
+  50% { filter: brightness(1.8); }
+  100% { filter: brightness(1.0); }
 }
 
-/* RESULT */
-.result{
-  margin-top:16px;
-  background:rgba(0,0,0,.25);
-  padding:14px;
-  border-radius:14px;
-  width:100%;
-  max-width:560px;
-  font-size:15px;
-}
+/* Field, button, result, actions */
+.subtitle { font-size:16px; opacity:0.9; margin-bottom:20px;}
+.field { text-align:left; margin-bottom:12px; width:100%; max-width:560px;}
+label { font-size:14px; display:block; margin-bottom:6px;}
+input, select { width:100%; padding:11px 12px; border-radius:12px; border:none; font-size:15px;}
+button { width:100%; margin-top:14px; padding:13px; border-radius:14px; border:none; background:linear-gradient(135deg,#ffd700,#ffb700); font-weight:bold; font-size:16px; cursor:pointer;}
+.result { margin-top:16px; font-size:15px; text-align:left; background:rgba(0,0,0,0.25); padding:14px; border-radius:14px; word-break:break-word; width:100%; max-width:560px;}
+.info { margin-top:8px; font-size:14px; text-align:center; color:#ffd700; font-weight:bold; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;}
+.actions { display:flex; gap:10px; margin-top:16px; width:100%; max-width:560px;}
+.actions a { flex:1; text-decoration:none; text-align:center; padding:12px; border-radius:12px; font-weight:bold; color:#1b1b1b; background:linear-gradient(135deg,#fff,#ffd700);}
+.actions a#telegramBtn { background:linear-gradient(135deg,#0088cc,#00bfff); color:#fff;}
+@media(max-width:400px){.field, .result, .actions { max-width:100%;}}
 
-.info{
-  margin-top:8px;
-  font-size:14px;
-  color:#ffd700;
-  font-weight:bold;
-}
-
-/* ACTION BUTTONS */
-.actions{
-  width:100%;
-  max-width:560px;
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-}
-.actions a{
-  flex:1;
-  text-decoration:none;
-  text-align:center;
-  padding:13px;
-  border-radius:14px;
-  font-weight:bold;
-  background:#111;
-}
-
-/* TELEGRAM BUTTON */
-.telegram{
-  margin-top:12px;
-  width:100%;
-  max-width:280px;
-  text-decoration:none;
-  text-align:center;
-  padding:13px;
-  border-radius:14px;
-  font-weight:bold;
-  background:#111;
-}
-
-/* POPUP */
-#popup{
-  position:fixed;
-  top:-80px;
-  right:20px;
-  background:#ffd700;
-  color:#000;
-  padding:12px 20px;
-  border-radius:10px;
-  font-weight:bold;
-  box-shadow:0 0 10px #000;
-  transition:.5s;
-  opacity:0;
-  z-index:999;
+/* Pop-up notification */
+#popup {
+  position: fixed;
+  top: -60px; /* start di atas layar */
+  right: 20px;
+  background: rgba(255,215,0,0.95);
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #000;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+  transition: top 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
 }
 </style>
 </head>
-
 <body>
 
 <img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
-<h1 class="shine">KOSMO TOTO</h1>
+<h1>KOSMO TOTO</h1>
 <div class="subtitle">Generator Rumus Angka</div>
 
 <div class="field">
-<label>Result Sebelumnya (4D)</label>
-<input id="prev" maxlength="4" placeholder="Contoh: 9431">
+  <label>Masukkan Result Sebelumnya (4D)</label>
+  <input id="prev" maxlength="4" placeholder="Contoh: 9431">
 </div>
 
 <div class="field">
-<label>Jumlah Baris</label>
-<select id="rows">
-<option>5</option><option>6</option><option>7</option>
-<option>8</option><option>9</option><option>10</option>
-</select>
+  <label>Jumlah Baris Rumus</label>
+  <select id="rows">
+    <option value="5">5 Baris</option>
+    <option value="6">6 Baris</option>
+    <option value="7">7 Baris</option>
+    <option value="8">8 Baris</option>
+    <option value="9">9 Baris</option>
+    <option value="10">10 Baris</option>
+  </select>
 </div>
 
 <div class="field">
-<label>Jenis</label>
-<select id="type">
-<option value="4">4D</option>
-<option value="3">3D</option>
-<option value="2">2D</option>
-<option value="432">432D</option>
-</select>
+  <label>Pilih Jenis</label>
+  <select id="type">
+    <option value="4">4D</option>
+    <option value="3">3D</option>
+    <option value="2">2D</option>
+    <option value="432">432D</option>
+  </select>
 </div>
 
-<button class="shine" onclick="generate()">GENERATE</button>
+<button onclick="generate()">GENERATE</button>
 
 <div class="result" id="result">-</div>
 <div class="info">KOMBINASIKAN DENGAN PREDIKSI KUAT ANDA</div>
 
 <div class="actions">
-<a class="shine" href="https://mez.ink/kosmototoresmi" target="_blank">DAFTAR</a>
-<a class="shine" href="https://heylink.me/KosmototoResmi/" target="_blank">LOGIN</a>
+  <a href="https://mez.ink/kosmototoresmi" target="_blank">DAFTAR</a>
+  <a href="https://heylink.me/KosmototoResmi/" target="_blank">LOGIN</a>
+  <a id="telegramBtn" href="https://t.me/kosmototoresmi" target="_blank">KIRIM KOMENTAR</a>
 </div>
 
-<a class="telegram shine" href="https://t.me/kosmototoresmi" target="_blank">GABUNG TELEGRAM</a>
-
+<!-- Pop-up -->
 <div id="popup"></div>
 
 <script>
-/* === DATA ID === */
-const bonusIDs=[
-"Ekobakso","Roses22","Dede007","Erpandi","Jangkrik","Setan83","Wahyu23",
-"Cbadru","Matuan","BANGPIKO","Ghitsa","Coronk13","Sindung","dian2001",
-"tyo212","Parchan88","Loiss71","santan6","Kingiqbale","Butet001"
-];
-
-const withdrawIDs=[
-"debos","dend","dian81","dista45","dragonball","fadlito2885","fandy",
-"fjr07","grafika38","iday06","joen66","jp776","aruldagul","lowkey"
-];
-
-function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
-function rupiah(n){return n.toLocaleString("id-ID")}
-
-function popup(text){
-  const p=document.getElementById("popup");
-  p.innerText=text;
-  p.style.top="20px";
-  p.style.opacity=1;
-  setTimeout(()=>{
-    p.style.top="-80px";
-    p.style.opacity=0;
-  },1500);
+/* ===== Fungsi Utama ===== */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    let j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
 }
 
-let turn=true;
-setInterval(()=>{
-  if(turn){
-    popup(`ID (${rand(withdrawIDs)}) BERHASIL WITHDRAW RP ${rupiah(Math.floor(Math.random()*9000000+100000))}`);
-  }else{
-    popup(`ID (${rand(bonusIDs)}) BERHASIL CLAIM BONUS RP ${rupiah(Math.floor(Math.random()*500000+50000))}`);
+function getShioFrom2D(num) {
+  const shioTable = {
+    "ULAR":["01","13","25","37","49","61","73","85","97"],
+    "NAGA":["02","14","26","38","50","62","74","86","98"],
+    "KELINCI":["03","15","27","39","51","63","75","87","99"],
+    "HARIMAU":["04","16","28","40","52","64","76","88","00"],
+    "KERBAU":["05","17","29","41","53","65","77","89"],
+    "TIKUS":["06","18","30","42","54","66","78","90"],
+    "BABI":["07","19","31","43","55","67","79","91"],
+    "ANJING":["08","20","32","44","56","68","80","92"],
+    "AYAM":["09","21","33","45","57","69","81","93"],
+    "MONYET":["10","22","34","46","58","70","82","94"],
+    "KAMBING":["11","23","35","47","59","71","83","95"],
+    "KUDA":["12","24","36","48","60","72","84","96"]
+  };
+  num = num.padStart(2,"0");
+  for(const [shio, nums] of Object.entries(shioTable)){
+    if(nums.includes(num)) return shio;
   }
-  turn=!turn;
-},2000);
+  return "-";
+}
 
-/* GENERATOR */
+function getTop2Shio(hasil2){
+  let freq={};
+  hasil2.forEach(n=>{ freq[n]=(freq[n]||0)+1; });
+  let sorted = Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+  let top2 = sorted.slice(0,2);
+  return top2.map(n=>getShioFrom2D(n));
+}
+
+/* ===== Popup ===== */
+function showPopup(message, duration = 3000) {
+  const popup = document.getElementById('popup');
+  popup.innerText = message;
+  popup.style.top = '20px';
+  popup.style.opacity = '1';
+  
+  setTimeout(() => {
+    popup.style.top = '-60px';
+    popup.style.opacity = '0';
+  }, duration);
+}
+
+/* ===== Generator ===== */
 function generate(){
-  const prev=document.getElementById("prev").value;
-  if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
-  let html="<b>HASIL:</b><br>";
-  for(let i=0;i<6;i++){
-    let r="";
-    for(let j=0;j<4;j++){
-      r+=(+prev[j]+i+Math.floor(Math.random()*2))%10;
-    }
-    html+=r+" - ";
+  const prev = document.getElementById('prev').value;
+  if(!/^\d{4}$/.test(prev)){
+    alert('Result harus 4 digit');
+    return;
   }
-  document.getElementById("result").innerHTML=html;
-}
-</script>
+  const rows = parseInt(document.getElementById('rows').value);
+  const type = document.getElementById('type').value;
 
+  const allDigits=[0,1,2,3,4,5,6,7,8,9];
+  let bbfs = shuffle([...allDigits]).slice(0,7);
+  let poltar = shuffle([...bbfs]).slice(0,5);
+  let cb = `${shuffle([...bbfs])[0]}/${shuffle([...bbfs])[1]}`;
+
+  let hasil4=[], hasil3=[], hasil2=[], twin=[];
+
+  function generateHasil(len){
+    let arr=[];
+    for(let i=0;i<rows;i++){
+      let line = [];
+      for(let j=0;j<len;j++){
+        line.push((prev[j]*1 + i + Math.floor(Math.random()*3)) % 10);
+      }
+      arr.push(line.join(''));
+    }
+    return arr;
+  }
+
+  if(type==='4') hasil4 = generateHasil(4);
+  else if(type==='3') hasil3 = generateHasil(3);
+  else if(type==='2') hasil2 = generateHasil(2);
+  else if(type==='432'){
+    hasil4 = generateHasil(4);
+    hasil3 = generateHasil(3);
+    hasil2 = generateHasil(2);
+
+    for(let i=0;i<rows;i++){
+      let num = bbfs[Math.floor(Math.random()*bbfs.length)];
+      twin.push(`${num}${num}`);
+    }
+  }
+
+  let topShio=[];
+  if(type==='432') topShio = getTop2Shio(hasil2);
+
+  let html = `<b>BBFS:</b> ${bbfs.join(' ')}<br>
+              <b>POLTAR:</b> ${poltar.join(' ')}<br>
+              <b>CB:</b> ${cb}<br>`;
+  if(hasil4.length) html += `<b>4D:</b><br>${hasil4.join(' - ')}<br>`;
+  if(hasil3.length) html += `<b>3D:</b><br>${hasil3.join(' - ')}<br>`;
+  if(hasil2.length) html += `<b>2D:</b><br>${hasil2.join(' - ')}<br>`;
+  if(twin.length) html += `<b>TWIN:</b> ${[...new Set(twin)].join(' - ')}<br>`;
+  if(topShio.length) html += `<b>SHIO:</b> ${topShio.join(' - ')}`;
+
+  document.getElementById('result').innerHTML = html;
+}
+
+/* ===== Popup Selang-Seling ===== */
+const bonusIDs = [
+  "Ekobakso","Roses22","Dede007","Erpandi","Jangkrik","Setan83","Wahyu23","Cbadru","Matuan",
+  "BANGPIKO","Ghitsa","Coronk13","Sindung","dian2001","tyo212","Parchan88","Loiss71","santan6",
+  "Kingiqbale","Butet001","Udinpoak","Iswara01","Beben80","benjohoki","Misran85","Ghea06",
+  "Lingling11","Penceng","Endrikcah","tingkirjaya22","Aasep02","Jaya86","byron28","sipurowi",
+  "Bandot57","Pursep99","Usup12345","Ardiyantogel18","Bumiku85","Rajjawd","Golgota12","Zhein16",
+  "max88win","nano888","Acenk27","koko6331","Purbalingga111","Saniya","Zulgacor","Jumatpahing",
+  "Weduskawin","Pukon2","Ellenzuan76","kopi111","Shiggy","painganjep3","Dimas80","INDRIYANTI",
+  "sanmumin84","Waras33","Aleksa","Cahyo79","adimoko01","Kera99","wahyu7890","Jagoan08",
+  "neles92","Pasell","Xardina","Andikpube"
+];
+
+const withdrawIDs = [
+  "debos","dend","dian81","dista45","dragonball","fadlito2885","fandy","fjr07","grafika38",
+  "iday06","joen66","jp776","kianpoke","lowkey","mdonk123","nagita96","nayy1708","pake767",
+  "pemula","pokemon0","poker1","quenzy","roketmluncur","sugih79","susanto","teraso"
+];
+
+function randomFrom(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function formatRupiah(num){
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+let isWithdrawTurn = true;
+
+setInterval(() => {
+  let id, amount;
+  if(isWithdrawTurn){
+    id = randomFrom(withdrawIDs);
+    amount = Math.floor(Math.random()*5000000) + 100000;
+    showPopup(`ID (${id}) TELAH BERHASIL WITHDRAW RP ${formatRupiah(amount)}`);
+  } else {
+    id = randomFrom(bonusIDs);
+    amount = Math.floor(Math.random()*2000000) + 50000;
+    showPopup(`ID (${id}) Berhasil claim bonus RP ${formatRupiah(amount)}`);
+  }
+  isWithdrawTurn = !isWithdrawTurn;
+}, 2000);
+
+</script>
 </body>
 </html>
