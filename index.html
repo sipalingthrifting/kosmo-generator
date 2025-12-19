@@ -232,9 +232,9 @@ function generate(){
   let html = `<b>BBFS:</b> ${bbfs.join(' ')}<br>
               <b>POLTAR:</b> ${poltar.join(' ')}<br>
               <b>CB:</b> ${cb}<br>`;
-  if(hasil4.length) html += `<b>4D:</b><br>${hasil4.join(' - ')}<br>`;
-  if(hasil3.length) html += `<b>3D:</b><br>${hasil3.join(' - ')}<br>`;
-  if(hasil2.length) html += `<b>2D:</b><br>${hasil2.join(' - ')}<br>`;
+  if(hasil4.length) html += `<b>HASIL 4D:</b><br>${hasil4.join(' - ')}<br>`;
+  if(hasil3.length) html += `<b>HASIL 3D:</b><br>${hasil3.join(' - ')}<br>`;
+  if(hasil2.length) html += `<b>HASIL 2D:</b><br>${hasil2.join(' - ')}<br>`;
   if(twin.length) html += `<b>TWIN:</b> ${[...new Set(twin)].join(' - ')}<br>`;
   if(topShio.length) html += `<b>SHIO:</b> ${topShio.join(' - ')}`;
 
