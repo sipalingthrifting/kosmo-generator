@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Panel Admin - Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  background:#0f0f1a;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  padding:20px;
+}
+h2{text-align:center;margin-bottom:20px}
+
+.card{
+  background:#16162a;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+input,button{
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  font-size:14px;
+}
+
+button{
+  background:linear-gradient(45deg,gold,orange);
+  font-weight:bold;
+  cursor:pointer;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+th,td{
+  border:1px solid #333;
+  padding:10px;
+  text-align:center;
+}
+th{background:#222}
+
+.free{color:#00ff9c;font-weight:bold}
+.used{color:#ff5252;font-weight:bold}
+
+.action button{
+  padding:6px 10px;
+  font-size:12px;
+  margin:2px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🧾 PANEL ADMIN – DEMO</h2>
+
+<!-- TAMBAH KUPON -->
+<div class="card">
+  <h3>➕ Tambah Kupon</h3>
+  <input placeholder="Contoh: KOSMO123">
+  <button>Tambah</button>
+</div>
+
+<!-- DATA KUPON -->
+<div class="card">
+  <h3>📋 Data Kupon</h3>
+
+  <table>
+    <tr>
+      <th>No</th>
+      <th>Kode Kupon</th>
+      <th>Status</th>
+      <th>Hadiah</th>
+      <th>Waktu Pakai</th>
+      <th>Aksi</th>
+    </tr>
+
+    <tr>
+      <td>1</td>
+      <td>KOSMO123</td>
+      <td class="free">FREE</td>
+      <td>-</td>
+      <td>-</td>
+      <td class="action">
+        <button>♻️ Reset</button>
+        <button>🗑️ Hapus</button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>2</td>
+      <td>SPIN777</td>
+      <td class="used">USED</td>
+      <td>BONUS 20%</td>
+      <td>2025-12-19 18:10</td>
+      <td class="action">
+        <button>♻️ Reset</button>
+        <button>🗑️ Hapus</button>
+      </td>
+    </tr>
+
+    <tr>
+      <td>3</td>
+      <td>BONUS888</td>
+      <td class="free">FREE</td>
+      <td>-</td>
+      <td>-</td>
+      <td class="action">
+        <button>♻️ Reset</button>
+        <button>🗑️ Hapus</button>
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+<!-- INFO -->
+<div class="card">
+  <h3>ℹ️ Info</h3>
+  <ul>
+    <li>FREE = belum dipakai</li>
+    <li>USED = sudah dipakai</li>
+    <li>Reset = kupon bisa dipakai ulang</li>
+    <li>Hapus = kupon dihapus permanen</li>
+  </ul>
+</div>
+
+</body>
+</html>
