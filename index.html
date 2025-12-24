@@ -20,8 +20,11 @@ body{
   align-items:center;
   padding:30px 15px;
 }
+
+/* LOGO & TITLE */
 .logo{max-width:130px;margin-bottom:6px;animation:logoShine 3s infinite}
 @keyframes logoShine{0%{filter:brightness(1)}50%{filter:brightness(1.8)}100%{filter:brightness(1)}}
+
 h1{
   font-size:42px;
   margin:4px 0;
@@ -32,7 +35,10 @@ h1{
   animation:shine 2s linear infinite;
 }
 @keyframes shine{0%{background-position:200%}100%{background-position:-200%}}
+
 .subtitle{font-size:14px;opacity:.9;margin-bottom:10px}
+
+/* FORM */
 .field{width:100%;max-width:520px;margin-bottom:10px}
 label{font-size:13px;margin-bottom:4px;display:block}
 input,select{
@@ -53,6 +59,8 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
+
+/* RESULT */
 .result{
   width:100%;
   max-width:520px;
@@ -62,7 +70,10 @@ button{
   border-radius:14px;
   font-size:14px;
 }
+.info{margin-top:8px;color:#ffd700;font-weight:bold;text-align:center}
 .top3{color:#ffd700;font-weight:bold;text-shadow:0 0 6px #000}
+
+/* ACTION */
 .actions{
   display:flex;
   gap:8px;
@@ -94,7 +105,7 @@ button{
   font-size:13px;
   font-weight:bold;
   box-shadow:0 0 15px #000;
-  z-index:9999999;
+  z-index:1000001;
   opacity:0;
   transition:.5s;
   pointer-events:none;
@@ -107,10 +118,12 @@ button{
   background:#fff;
   border-radius:50%;
   pointer-events:none;
-  animation:snowFall linear infinite;
   z-index:999999;
+  animation:snowFall linear infinite;
 }
-@keyframes snowFall{to{transform:translateY(110vh)}}
+@keyframes snowFall{
+  to{transform:translateY(110vh)}
+}
 </style>
 </head>
 
@@ -123,7 +136,7 @@ button{
 
 <div class="field">
 <label>Result Sebelumnya (4D)</label>
-<input id="prev" maxlength="4" placeholder="Contoh: 7307">
+<input id="prev" maxlength="4" placeholder="Contoh: 9430">
 </div>
 
 <div class="field">
@@ -138,16 +151,17 @@ button{
 <div class="field">
 <label>Jenis</label>
 <select id="type">
-<option value="432">432D</option>
 <option value="4">4D</option>
 <option value="3">3D</option>
 <option value="2">2D</option>
+<option value="432">432D</option>
 </select>
 </div>
 
 <button onclick="generate()">GENERATE</button>
 
 <div class="result" id="result">-</div>
+<div class="info">KOMBINASIKAN DENGAN PREDIKSI KUAT ANDA</div>
 
 <div class="actions">
 <a href="https://kosmototo.online/register?referral_code=master4d" target="_blank">DAFTAR</a>
@@ -158,110 +172,129 @@ button{
 <div id="popup"></div>
 
 <script>
-/* UTIL */
+/* ===== UTIL ===== */
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function top3(a){return a.map((v,i)=>i<3?`<span class="top3">${v}</span>`:v).join(" - ");}
+function highlightTop3(arr){return arr.map((n,i)=>i<3?`<span class="top3">${n}</span>`:n).join(" - ");}
+
+/* FILTER */
+function scoreNeutral(n){let u=new Set(n).size;return u*2+( /(\d)\1/.test(n)?2:0 );}
+function isWeak(n){let u=new Set(n).size;return u===1||(u===2&&n.length>=4);}
 
 /* SHIO */
-function getShio(n){
-const s={
-ULAR":["01","13","25","37","49","61","73","85","97"],
-NAGA":["02","14","26","38","50","62","74","86","98"],
-KELINCI":["03","15","27","39","51","63","75","87","99"],
-HARIMAU":["04","16","28","40","52","64","76","88","00"],
-KERBAU":["05","17","29","41","53","65","77","89"],
-TIKUS":["06","18","30","42","54","66","78","90"],
-BABI":["07","19","31","43","55","67","79","91"],
-ANJING":["08","20","32","44","56","68","80","92"],
-AYAM":["09","21","33","45","57","69","81","93"],
-MONYET":["10","22","34","46","58","70","82","94"],
-KAMBING":["11","23","35","47","59","71","83","95"],
-KUDA":["12","24","36","48","60","72","84","96"]
-
-};
-for(let k in s) if(s[k].includes(n)) return k;
-return "-";
+function getShio(num){
+ const t={
+  "ULAR":["01","13","25","37","49","61","73","85","97"],
+  "NAGA":["02","14","26","38","50","62","74","86","98"],
+  "KELINCI":["03","15","27","39","51","63","75","87","99"],
+  "HARIMAU":["04","16","28","40","52","64","76","88","00"],
+  "KERBAU":["05","17","29","41","53","65","77","89"],
+  "TIKUS":["06","18","30","42","54","66","78","90"],
+  "BABI":["07","19","31","43","55","67","79","91"],
+  "ANJING":["08","20","32","44","56","68","80","92"],
+  "AYAM":["09","21","33","45","57","69","81","93"],
+  "MONYET":["10","22","34","46","58","70","82","94"],
+  "KAMBING":["11","23","35","47","59","71","83","95"],
+  "KUDA":["12","24","36","48","60","72","84","96"]
+ };
+ num=num.padStart(2,"0");
+ for(let s in t){if(t[s].includes(num))return s}
+ return "-";
+}
+function topShio(arr){
+ let f={};
+ arr.forEach(n=>{let s=getShio(n);if(s!=="-")f[s]=(f[s]||0)+1});
+ return Object.keys(f).sort((a,b)=>f[b]-f[a]).slice(0,2);
 }
 
-/* GENERATE */
+/* GENERATOR */
+function gen(len,r,bbfs){
+ let p=[];
+ for(let i=0;i<r*6;i++){
+  let n="";
+  for(let j=0;j<len;j++)n+=bbfs[Math.floor(Math.random()*bbfs.length)];
+  if(!isWeak(n))p.push(n);
+ }
+ p=[...new Set(p)];
+ p.sort((a,b)=>scoreNeutral(b)-scoreNeutral(a));
+ return p.slice(0,r);
+}
+
 function generate(){
-const prev=document.getElementById("prev").value;
-const rows=parseInt(document.getElementById("rows").value);
-const type=document.getElementById("type").value;
-if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
+ let prev=document.getElementById("prev").value;
+ if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
+ let rows=+document.getElementById("rows").value;
+ let type=document.getElementById("type").value;
 
-let poltar=[...new Set(prev.split("").map(Number))];
-while(poltar.length<5){
-let r=Math.floor(Math.random()*10);
-if(!poltar.includes(r))poltar.push(r);
-}
+ let digits=[0,1,2,3,4,5,6,7,8,9];
+ let bbfs=shuffle([...digits]).slice(0,7);
+ let poltar=shuffle([...bbfs]).slice(0,5);
 
-let bbfs=[...new Set([...poltar,1,6,8,9])].slice(0,8);
-let cb=[bbfs[0],bbfs[1]];
+ let h4=[],h3=[],h2=[],twin=[];
+ if(type==="4")h4=gen(4,rows,bbfs);
+ if(type==="3")h3=gen(3,rows,bbfs);
+ if(type==="2")h2=gen(2,rows,bbfs);
+ if(type==="432"){
+  h4=gen(4,rows,bbfs);
+  h3=gen(3,rows,bbfs);
+  h2=gen(2,rows,bbfs);
+  twin=shuffle(bbfs).slice(0,2).map(n=>`${n}${n}`);
+ }
 
-function gen(len){
-let o=[];
-for(let i=0;i<rows*6;i++){
-let n="";
-for(let j=0;j<len;j++)n+=bbfs[Math.floor(Math.random()*bbfs.length)];
-if(new Set(n).size>1)o.push(n);
-}
-return [...new Set(o)].slice(0,rows);
-}
+ let tunggal={as:poltar.slice(0,3),kop:poltar.slice(3,5)};
+ let shio=h2.length?topShio(h2):[];
 
-let h4=[],h3=[],h2=[];
-if(type==="4")h4=gen(4);
-if(type==="3")h3=gen(3);
-if(type==="2")h2=gen(2);
-if(type==="432"){h4=gen(4);h3=gen(3);h2=gen(2);}
+ let html=`<b>BBFS:</b> ${bbfs.join(" ")}<br>
+ <b>POLTAR:</b> ${poltar.join(" ")}<br>
+ <b>CB:</b> ${bbfs[0]}/${bbfs[1]}<br><br>`;
 
-let twin=bbfs.slice(0,2).map(n=>`${n}${n}`);
-let shio=[...new Set(h2.map(getShio))].filter(s=>s!=="-").slice(0,2);
+ if(h4.length)html+=`<b>HASIL 4D:</b><br>${highlightTop3(h4)}<br><br>`;
+ if(h3.length)html+=`<b>HASIL 3D:</b><br>${highlightTop3(h3)}<br><br>`;
+ if(h2.length)html+=`<b>HASIL 2D:</b><br>${highlightTop3(h2)}<br><br>`;
+ if(twin.length)html+=`<b>TWIN:</b> ${twin.join(" - ")}<br><br>`;
 
-let html=`
-<b>POLTAR:</b> ${poltar.join(" ")}<br>
-<b>BBFS:</b> ${bbfs.join(" ")}<br>
-<b>CB:</b> ${cb.join("/")}<br><br>
-`;
+ html+=`<b>ANGKA TUNGGAL:</b><br>AS: ${tunggal.as.join(" ")}<br>KOP: ${tunggal.kop.join(" ")}<br><br>`;
+ if(shio.length)html+=`<b>SHIO:</b> ${shio.join(" - ")}`;
 
-if(h4.length)html+=`<b>4D:</b><br>${top3(h4)}<br><br>`;
-if(h3.length)html+=`<b>3D:</b><br>${top3(h3)}<br><br>`;
-if(h2.length)html+=`<b>2D:</b><br>${top3(h2)}<br><br>`;
-html+=`<b>TWIN:</b> ${twin.join(" - ")}<br><br>`;
-if(shio.length)html+=`<b>SHIO:</b> ${shio.join(" - ")}`;
-
-document.getElementById("result").innerHTML=html;
+ document.getElementById("result").innerHTML=html;
 }
 
 /* SALJU */
 for(let i=0;i<40;i++){
-let s=document.createElement("div");
-s.className="snow";
-let z=Math.random()*4+2;
-s.style.width=z+"px";
-s.style.height=z+"px";
-s.style.left=Math.random()*100+"vw";
-s.style.opacity=Math.random();
-s.style.animationDuration=(Math.random()*5+5)+"s";
-document.body.appendChild(s);
+ let s=document.createElement("div");
+ s.className="snow";
+ let z=Math.random()*4+2;
+ s.style.width=z+"px";
+ s.style.height=z+"px";
+ s.style.left=Math.random()*100+"vw";
+ s.style.opacity=Math.random();
+ s.style.animationDuration=(Math.random()*5+5)+"s";
+ s.style.animationDelay=Math.random()*5+"s";
+ document.body.appendChild(s);
 }
 
 /* POPUP */
-const bonusIDs=["Ekobakso","Kosmo54","Masterhk","Erpandi"];
-const withdrawIDs=["Maxwin","dragonball","dista45"];
-function rp(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")}
+const bonusIDs=["Ekobakso","Roses22","Dede007","Erpandi","Jangkrik","Setan83"];
+const withdrawIDs=["debos","dend","dian81","dista45","dragonball","Maxwin"];
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function rupiah(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")}
 function showPopup(t){
-const p=document.getElementById("popup");
-p.innerHTML=t;
-p.style.bottom="20px";p.style.opacity="1";
-setTimeout(()=>{p.style.bottom="-100px";p.style.opacity="0"},3000);
+ let p=document.getElementById("popup");
+ p.innerHTML=t;
+ p.style.bottom="20px";
+ p.style.opacity="1";
+ setTimeout(()=>{p.style.bottom="-100px";p.style.opacity="0"},3000);
 }
 let w=true;
 setInterval(()=>{
-let id=w?withdrawIDs[Math.floor(Math.random()*withdrawIDs.length)]:bonusIDs[Math.floor(Math.random()*bonusIDs.length)];
-let amt=w?Math.floor(Math.random()*5e6)+1e5:Math.floor(Math.random()*2e6)+5e4;
-showPopup(`ID (${id}) ${w?"WITHDRAW":"BONUS"} RP ${rp(amt)}`);
-w=!w;
+ let id,amt;
+ if(w){
+  id=rnd(withdrawIDs);amt=Math.floor(Math.random()*5e6)+1e5;
+  showPopup(`ID (${id}) BERHASIL WITHDRAW RP ${rupiah(amt)}`);
+ }else{
+  id=rnd(bonusIDs);amt=Math.floor(Math.random()*2e6)+5e4;
+  showPopup(`ID (${id}) CLAIM BONUS RP ${rupiah(amt)}`);
+ }
+ w=!w;
 },3500);
 </script>
 
