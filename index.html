@@ -297,6 +297,27 @@ setInterval(()=>{
  w=!w;
 },3500);
 </script>
+  
+<script>
+/* === JACKPOT PROGRESIF FINAL === */
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 
+function updateJackpot() {
+  const el = document.querySelector('.progresif-jackpot1');
+  if (!el) return;
+
+  const current = parseInt(el.textContent.replace(/[^\d]/g, '')) || 1131665972;
+  const increment = Math.floor(Math.random() * 3000) + 500; // stabil
+  const updated = current + increment;
+
+  el.innerHTML = `<span>IDR</span>${formatNumber(updated)}`;
+}
+
+/* update tiap 800ms (lebih natural & ringan) */
+setInterval(updateJackpot, 800);
+</script>
+  
 </body>
 </html>
