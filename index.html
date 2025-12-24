@@ -10,7 +10,7 @@ body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:
-    linear-gradient(rgba(0,191,255,0.75), rgba(0,191,255,0.75)),
+    linear-gradient(rgba(0,191,255,.75), rgba(0,191,255,.75)),
     url("https://i.ibb.co/QvPJVhRr/background.jpg") no-repeat center center fixed;
   background-size:cover;
   color:#fff;
@@ -20,11 +20,14 @@ body{
   align-items:center;
   padding:30px 15px;
 }
-.logo{max-width:130px;margin-bottom:8px;animation:logoShine 3s infinite;}
+
+/* LOGO & TITLE */
+.logo{max-width:130px;margin-bottom:6px;animation:logoShine 3s infinite}
 @keyframes logoShine{0%{filter:brightness(1)}50%{filter:brightness(1.8)}100%{filter:brightness(1)}}
+
 h1{
   font-size:42px;
-  margin:5px 0;
+  margin:4px 0;
   background:linear-gradient(120deg,#ffd700,#fff,#ffd700);
   background-size:200% auto;
   -webkit-background-clip:text;
@@ -32,9 +35,12 @@ h1{
   animation:shine 2s linear infinite;
 }
 @keyframes shine{0%{background-position:200%}100%{background-position:-200%}}
-.subtitle{font-size:14px;opacity:.9;margin-bottom:12px}
+
+.subtitle{font-size:14px;opacity:.9;margin-bottom:10px}
+
+/* FORM */
 .field{width:100%;max-width:520px;margin-bottom:10px}
-label{font-size:13px;margin-bottom:5px;display:block}
+label{font-size:13px;margin-bottom:4px;display:block}
 input,select{
   width:100%;
   padding:11px;
@@ -53,6 +59,8 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
+
+/* RESULT */
 .result{
   width:100%;
   max-width:520px;
@@ -62,12 +70,10 @@ button{
   border-radius:14px;
   font-size:14px;
 }
-.info{
-  margin-top:8px;
-  color:#ffd700;
-  font-weight:bold;
-  text-align:center;
-}
+.info{margin-top:8px;color:#ffd700;font-weight:bold;text-align:center}
+.top3{color:#ffd700;font-weight:bold;text-shadow:0 0 6px #000}
+
+/* ACTION */
 .actions{
   display:flex;
   gap:8px;
@@ -86,29 +92,41 @@ button{
   font-weight:bold;
 }
 .actions a#tg{background:linear-gradient(135deg,#0088cc,#00bfff);color:#fff}
-.top3{color:#ffd700;font-weight:bold;text-shadow:0 0 6px #000}
+
+/* POPUP */
+#popup{
+  position:fixed;
+  bottom:-100px;
+  right:20px;
+  background:linear-gradient(135deg,#ffd700,#ffb700);
+  color:#000;
+  padding:12px 18px;
+  border-radius:14px;
+  font-size:13px;
+  font-weight:bold;
+  box-shadow:0 0 15px #000;
+  z-index:1000001;
+  opacity:0;
+  transition:.5s;
+  pointer-events:none;
+}
+
+/* SALJU */
+.snow{
+  position:fixed;
+  top:-10px;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:999999;
+  animation:snowFall linear infinite;
+}
+@keyframes snowFall{
+  to{transform:translateY(110vh)}
+}
 </style>
 </head>
-<script>
-/* === SALJU JATUH === */
-const snowCount = 40; // jumlah salju (bisa 20–60)
 
-for(let i=0;i<snowCount;i++){
-  let snow = document.createElement("div");
-  snow.className = "snow";
-
-  let size = Math.random()*4 + 2;
-  snow.style.width = size + "px";
-  snow.style.height = size + "px";
-
-  snow.style.left = Math.random()*100 + "vw";
-  snow.style.animationDuration = Math.random()*5 + 5 + "s";
-  snow.style.animationDelay = Math.random()*5 + "s";
-  snow.style.opacity = Math.random();
-
-  document.body.appendChild(snow);
-}
-</script>
 <body>
 
 <img src="https://i.ibb.co/CsXqGZVn/logo.png" class="logo">
@@ -151,113 +169,133 @@ for(let i=0;i<snowCount;i++){
 <a id="tg" href="https://t.me/kosmototoresmi" target="_blank">TELEGRAM</a>
 </div>
 
+<div id="popup"></div>
+
 <script>
-/* UTIL */
+/* ===== UTIL ===== */
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function highlightTop3(arr){return arr.map((n,i)=>i<3?`<span class="top3">${n}</span>`:n).join(" - ");}
 
-/* FILTER & SCORE */
-function scoreNeutral(num){
-  let s=0,u=new Set(num).size;
-  s+=u*2;
-  if(/(\d)\1/.test(num)) s+=2;
-  if(u===1) s-=4;
-  return s;
-}
-function isWeakPattern(num){
-  let u=new Set(num).size;
-  if(u===1) return true;
-  if(u===2 && num.length>=4) return true;
-  return false;
-}
+/* FILTER */
+function scoreNeutral(n){let u=new Set(n).size;return u*2+( /(\d)\1/.test(n)?2:0 );}
+function isWeak(n){let u=new Set(n).size;return u===1||(u===2&&n.length>=4);}
 
 /* SHIO */
-function getShioFrom2D(num){
-  const t={
-    "ULAR":["01","13","25","37","49","61","73","85","97"],
-    "NAGA":["02","14","26","38","50","62","74","86","98"],
-    "KELINCI":["03","15","27","39","51","63","75","87","99"],
-    "HARIMAU":["04","16","28","40","52","64","76","88","00"],
-    "KERBAU":["05","17","29","41","53","65","77","89"],
-    "TIKUS":["06","18","30","42","54","66","78","90"],
-    "BABI":["07","19","31","43","55","67","79","91"],
-    "ANJING":["08","20","32","44","56","68","80","92"],
-    "AYAM":["09","21","33","45","57","69","81","93"],
-    "MONYET":["10","22","34","46","58","70","82","94"],
-    "KAMBING":["11","23","35","47","59","71","83","95"],
-    "KUDA":["12","24","36","48","60","72","84","96"]
-  };
-  num=num.toString().padStart(2,"0");
-  for(let s in t){if(t[s].includes(num)) return s;}
-  return "-";
+function getShio(num){
+ const t={
+  "ULAR":["01","13","25","37","49","61","73","85","97"],
+  "NAGA":["02","14","26","38","50","62","74","86","98"],
+  "KELINCI":["03","15","27","39","51","63","75","87","99"],
+  "HARIMAU":["04","16","28","40","52","64","76","88","00"],
+  "KERBAU":["05","17","29","41","53","65","77","89"],
+  "TIKUS":["06","18","30","42","54","66","78","90"],
+  "BABI":["07","19","31","43","55","67","79","91"],
+  "ANJING":["08","20","32","44","56","68","80","92"],
+  "AYAM":["09","21","33","45","57","69","81","93"],
+  "MONYET":["10","22","34","46","58","70","82","94"],
+  "KAMBING":["11","23","35","47","59","71","83","95"],
+  "KUDA":["12","24","36","48","60","72","84","96"]
+ };
+ num=num.padStart(2,"0");
+ for(let s in t){if(t[s].includes(num))return s}
+ return "-";
 }
-function getTopShio(arr){
-  let f={};
-  arr.forEach(n=>{
-    let s=getShioFrom2D(n);
-    if(s!=="-") f[s]=(f[s]||0)+1;
-  });
-  return Object.keys(f).sort((a,b)=>f[b]-f[a]).slice(0,2);
-}
-
-/* ANGKA TUNGGAL DARI POLTAR */
-function getAngkaTunggalFromPoltar(poltar){
-  return {as:poltar.slice(0,3),kop:poltar.slice(3,5)};
+function topShio(arr){
+ let f={};
+ arr.forEach(n=>{let s=getShio(n);if(s!=="-")f[s]=(f[s]||0)+1});
+ return Object.keys(f).sort((a,b)=>f[b]-f[a]).slice(0,2);
 }
 
 /* GENERATOR */
-function generateHasil(len,rows,bbfs){
-  let pool=[];
-  for(let i=0;i<rows*6;i++){
-    let n="";
-    for(let j=0;j<len;j++) n+=bbfs[Math.floor(Math.random()*bbfs.length)];
-    if(!isWeakPattern(n)) pool.push(n);
-  }
-  pool=[...new Set(pool)];
-  pool.sort((a,b)=>scoreNeutral(b)-scoreNeutral(a));
-  return pool.slice(0,rows);
+function gen(len,r,bbfs){
+ let p=[];
+ for(let i=0;i<r*6;i++){
+  let n="";
+  for(let j=0;j<len;j++)n+=bbfs[Math.floor(Math.random()*bbfs.length)];
+  if(!isWeak(n))p.push(n);
+ }
+ p=[...new Set(p)];
+ p.sort((a,b)=>scoreNeutral(b)-scoreNeutral(a));
+ return p.slice(0,r);
 }
 
 function generate(){
-  let prev=document.getElementById("prev").value;
-  if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
-  let rows=parseInt(document.getElementById("rows").value);
-  let type=document.getElementById("type").value;
+ let prev=document.getElementById("prev").value;
+ if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
+ let rows=+document.getElementById("rows").value;
+ let type=document.getElementById("type").value;
 
-  let digits=[0,1,2,3,4,5,6,7,8,9];
-  let bbfs=shuffle([...digits]).slice(0,7);
-  let poltar=shuffle([...bbfs]).slice(0,5);
-  let cbArr=shuffle([...bbfs]);
+ let digits=[0,1,2,3,4,5,6,7,8,9];
+ let bbfs=shuffle([...digits]).slice(0,7);
+ let poltar=shuffle([...bbfs]).slice(0,5);
 
-  let h4=[],h3=[],h2=[],twin=[];
-  if(type==="4") h4=generateHasil(4,rows,bbfs);
-  if(type==="3") h3=generateHasil(3,rows,bbfs);
-  if(type==="2") h2=generateHasil(2,rows,bbfs);
-  if(type==="432"){
-    h4=generateHasil(4,rows,bbfs);
-    h3=generateHasil(3,rows,bbfs);
-    h2=generateHasil(2,rows,bbfs);
-    twin=shuffle(bbfs).slice(0,2).map(n=>`${n}${n}`);
-  }
+ let h4=[],h3=[],h2=[],twin=[];
+ if(type==="4")h4=gen(4,rows,bbfs);
+ if(type==="3")h3=gen(3,rows,bbfs);
+ if(type==="2")h2=gen(2,rows,bbfs);
+ if(type==="432"){
+  h4=gen(4,rows,bbfs);
+  h3=gen(3,rows,bbfs);
+  h2=gen(2,rows,bbfs);
+  twin=shuffle(bbfs).slice(0,2).map(n=>`${n}${n}`);
+ }
 
-  let shio=h2.length?getTopShio(h2):[];
-  let tunggal=getAngkaTunggalFromPoltar(poltar);
+ let tunggal={as:poltar.slice(0,3),kop:poltar.slice(3,5)};
+ let shio=h2.length?topShio(h2):[];
 
-  let html=`
-<b>BBFS:</b> ${bbfs.join(" ")}<br>
-<b>POLTAR:</b> ${poltar.join(" ")}<br>
-<b>CB:</b> ${cbArr[0]}/${cbArr[1]}<br><br>`;
+ let html=`<b>BBFS:</b> ${bbfs.join(" ")}<br>
+ <b>POLTAR:</b> ${poltar.join(" ")}<br>
+ <b>CB:</b> ${bbfs[0]}/${bbfs[1]}<br><br>`;
 
-  if(h4.length) html+=`<b>HASIL 4D:</b><br>${highlightTop3(h4)}<br><br>`;
-  if(h3.length) html+=`<b>HASIL 3D:</b><br>${highlightTop3(h3)}<br><br>`;
-  if(h2.length) html+=`<b>HASIL 2D:</b><br>${highlightTop3(h2)}<br><br>`;
-  if(twin.length) html+=`<b>TWIN:</b> ${twin.join(" - ")}<br><br>`;
+ if(h4.length)html+=`<b>HASIL 4D:</b><br>${highlightTop3(h4)}<br><br>`;
+ if(h3.length)html+=`<b>HASIL 3D:</b><br>${highlightTop3(h3)}<br><br>`;
+ if(h2.length)html+=`<b>HASIL 2D:</b><br>${highlightTop3(h2)}<br><br>`;
+ if(twin.length)html+=`<b>TWIN:</b> ${twin.join(" - ")}<br><br>`;
 
-  html+=`<b>ANGKA TUNGGAL:</b><br>AS: ${tunggal.as.join(" ")}<br>KOP: ${tunggal.kop.join(" ")}<br><br>`;
-  if(shio.length) html+=`<b>SHIO:</b> ${shio.join(" - ")}`;
+ html+=`<b>ANGKA TUNGGAL:</b><br>AS: ${tunggal.as.join(" ")}<br>KOP: ${tunggal.kop.join(" ")}<br><br>`;
+ if(shio.length)html+=`<b>SHIO:</b> ${shio.join(" - ")}`;
 
-  document.getElementById("result").innerHTML=html;
+ document.getElementById("result").innerHTML=html;
 }
+
+/* SALJU */
+for(let i=0;i<40;i++){
+ let s=document.createElement("div");
+ s.className="snow";
+ let z=Math.random()*4+2;
+ s.style.width=z+"px";
+ s.style.height=z+"px";
+ s.style.left=Math.random()*100+"vw";
+ s.style.opacity=Math.random();
+ s.style.animationDuration=(Math.random()*5+5)+"s";
+ s.style.animationDelay=Math.random()*5+"s";
+ document.body.appendChild(s);
+}
+
+/* POPUP */
+const bonusIDs=["Ekobakso","Roses22","Dede007","Erpandi","Jangkrik","Setan83"];
+const withdrawIDs=["debos","dend","dian81","dista45","dragonball","Maxwin"];
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function rupiah(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")}
+function showPopup(t){
+ let p=document.getElementById("popup");
+ p.innerHTML=t;
+ p.style.bottom="20px";
+ p.style.opacity="1";
+ setTimeout(()=>{p.style.bottom="-100px";p.style.opacity="0"},3000);
+}
+let w=true;
+setInterval(()=>{
+ let id,amt;
+ if(w){
+  id=rnd(withdrawIDs);amt=Math.floor(Math.random()*5e6)+1e5;
+  showPopup(`ID (${id}) BERHASIL WITHDRAW RP ${rupiah(amt)}`);
+ }else{
+  id=rnd(bonusIDs);amt=Math.floor(Math.random()*2e6)+5e4;
+  showPopup(`ID (${id}) CLAIM BONUS RP ${rupiah(amt)}`);
+ }
+ w=!w;
+},3500);
 </script>
 
 </body>
