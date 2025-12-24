@@ -20,10 +20,8 @@ body{
   align-items:center;
   padding:30px 15px;
 }
-
 .logo{max-width:130px;margin-bottom:8px;animation:logoShine 3s infinite;}
 @keyframes logoShine{0%{filter:brightness(1)}50%{filter:brightness(1.8)}100%{filter:brightness(1)}}
-
 h1{
   font-size:42px;
   margin:5px 0;
@@ -34,9 +32,7 @@ h1{
   animation:shine 2s linear infinite;
 }
 @keyframes shine{0%{background-position:200%}100%{background-position:-200%}}
-
 .subtitle{font-size:14px;opacity:.9;margin-bottom:12px}
-
 .field{width:100%;max-width:520px;margin-bottom:10px}
 label{font-size:13px;margin-bottom:5px;display:block}
 input,select{
@@ -46,7 +42,6 @@ input,select{
   border:none;
   font-size:14px;
 }
-
 button{
   width:100%;
   max-width:520px;
@@ -58,7 +53,6 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-
 .result{
   width:100%;
   max-width:520px;
@@ -68,14 +62,12 @@ button{
   border-radius:14px;
   font-size:14px;
 }
-
 .info{
   margin-top:8px;
   color:#ffd700;
   font-weight:bold;
   text-align:center;
 }
-
 .actions{
   display:flex;
   gap:8px;
@@ -94,12 +86,7 @@ button{
   font-weight:bold;
 }
 .actions a#tg{background:linear-gradient(135deg,#0088cc,#00bfff);color:#fff}
-
-.top3{
-  color:#ffd700;
-  font-weight:bold;
-  text-shadow:0 0 6px #000;
-}
+.top3{color:#ffd700;font-weight:bold;text-shadow:0 0 6px #000}
 </style>
 </head>
 
@@ -146,17 +133,18 @@ button{
 </div>
 
 <script>
+/* UTIL */
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function highlightTop3(arr){return arr.map((n,i)=>i<3?`<span class="top3">${n}</span>`:n).join(" - ");}
 
+/* FILTER & SCORE */
 function scoreNeutral(num){
-  let s=0;
-  let u=new Set(num).size;
+  let s=0,u=new Set(num).size;
   s+=u*2;
   if(/(\d)\1/.test(num)) s+=2;
   if(u===1) s-=4;
   return s;
 }
-
 function isWeakPattern(num){
   let u=new Set(num).size;
   if(u===1) return true;
@@ -164,16 +152,41 @@ function isWeakPattern(num){
   return false;
 }
 
-function highlightTop3(arr){
-  return arr.map((n,i)=>i<3?`<span class="top3">${n}</span>`:n).join(" - ");
+/* SHIO */
+function getShioFrom2D(num){
+  const t={
+    "ULAR":["01","13","25","37","49","61","73","85","97"],
+    "NAGA":["02","14","26","38","50","62","74","86","98"],
+    "KELINCI":["03","15","27","39","51","63","75","87","99"],
+    "HARIMAU":["04","16","28","40","52","64","76","88","00"],
+    "KERBAU":["05","17","29","41","53","65","77","89"],
+    "TIKUS":["06","18","30","42","54","66","78","90"],
+    "BABI":["07","19","31","43","55","67","79","91"],
+    "ANJING":["08","20","32","44","56","68","80","92"],
+    "AYAM":["09","21","33","45","57","69","81","93"],
+    "MONYET":["10","22","34","46","58","70","82","94"],
+    "KAMBING":["11","23","35","47","59","71","83","95"],
+    "KUDA":["12","24","36","48","60","72","84","96"]
+  };
+  num=num.toString().padStart(2,"0");
+  for(let s in t){if(t[s].includes(num)) return s;}
+  return "-";
+}
+function getTopShio(arr){
+  let f={};
+  arr.forEach(n=>{
+    let s=getShioFrom2D(n);
+    if(s!=="-") f[s]=(f[s]||0)+1;
+  });
+  return Object.keys(f).sort((a,b)=>f[b]-f[a]).slice(0,2);
 }
 
-function getAngkaTunggal(arr){
-  let as=new Set(),kop=new Set();
-  arr.forEach(n=>{as.add(n[0]);kop.add(n[1]);});
-  return {as:[...as].slice(0,5),kop:[...kop].slice(0,5)};
+/* ANGKA TUNGGAL DARI POLTAR */
+function getAngkaTunggalFromPoltar(poltar){
+  return {as:poltar.slice(0,3),kop:poltar.slice(3,5)};
 }
 
+/* GENERATOR */
 function generateHasil(len,rows,bbfs){
   let pool=[];
   for(let i=0;i<rows*6;i++){
@@ -189,7 +202,6 @@ function generateHasil(len,rows,bbfs){
 function generate(){
   let prev=document.getElementById("prev").value;
   if(!/^\d{4}$/.test(prev)){alert("Result harus 4 digit");return;}
-
   let rows=parseInt(document.getElementById("rows").value);
   let type=document.getElementById("type").value;
 
@@ -209,6 +221,9 @@ function generate(){
     twin=shuffle(bbfs).slice(0,2).map(n=>`${n}${n}`);
   }
 
+  let shio=h2.length?getTopShio(h2):[];
+  let tunggal=getAngkaTunggalFromPoltar(poltar);
+
   let html=`
 <b>BBFS:</b> ${bbfs.join(" ")}<br>
 <b>POLTAR:</b> ${poltar.join(" ")}<br>
@@ -219,10 +234,8 @@ function generate(){
   if(h2.length) html+=`<b>HASIL 2D:</b><br>${highlightTop3(h2)}<br><br>`;
   if(twin.length) html+=`<b>TWIN:</b> ${twin.join(" - ")}<br><br>`;
 
-  if(h4.length){
-    let t=getAngkaTunggal(h4);
-    html+=`<b>ANGKA TUNGGAL:</b><br>AS: ${t.as.join(" ")}<br>KOP: ${t.kop.join(" ")}`;
-  }
+  html+=`<b>ANGKA TUNGGAL:</b><br>AS: ${tunggal.as.join(" ")}<br>KOP: ${tunggal.kop.join(" ")}<br><br>`;
+  if(shio.length) html+=`<b>SHIO:</b> ${shio.join(" - ")}`;
 
   document.getElementById("result").innerHTML=html;
 }
